@@ -1,0 +1,1116 @@
+\documentclass[8pt]{beamer}
+
+% Theme Selection
+\usetheme{Madrid}
+\usecolortheme{whale}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{booktabs}
+
+% --- Title Page Information ---
+\title[2-Sample Location Problem]{2 Sample Location Problem}
+\author[]{Aniv Mazumder (MD2505) \\ Koushan Saha (MD2513) \\ Sanjhali Parmar (MD2521)}
+\institute[]{Indian Statistical Institute \\ M.Stat, 2nd Semester}
+\date{March 2026}
+
+\begin{document}
+
+% Title Slide
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Location Shift Model and Hypotheses}
+    \footnotesize % Reduced font size slightly to fit all boxes on one slide
+
+    % Box 1: Location Shift Model
+    \begin{block}{Location Shift Model}
+    \begin{center}
+        Let $X_1, \dots, X_m \stackrel{iid}{\sim} F(x)$ and $Y_1, \dots, Y_n \stackrel{iid}{\sim} G(x)$, be two independent samples where $F$ is continuous. \\
+        The shift model is defined as: $G(x) = F(x - \theta)$
+    \end{center}
+    \end{block}
+
+    % Box 2: Hypothesis Setups
+    \begin{block}{Hypothesis Setups}
+        \begin{columns}[t]
+            \begin{column}{0.31\textwidth}
+                \textbf{1. Location Shift direction}
+                \begin{itemize}
+                    \item $H_0: \theta = 0$
+                    \item $H_1: \theta > 0$
+                    \item $H_2: \theta < 0$
+                    \item $H_3: \theta \neq 0$
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.31\textwidth}
+                \textbf{2. Distributional}
+                \begin{itemize}
+                    \item $H_0: F = G$
+                    \item $H_1: G \leq F$
+                    \item $H_2: G \geq F$
+                    \item $H_3: F \neq G$
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.31\textwidth}
+                \textbf{3. Stochastic}
+                \begin{itemize}
+                    \item $H_0: X \stackrel{d}{=} Y$
+                    \item $H_1: X <_{st} Y$
+                    \item $H_2: Y <_{st} X$
+                    \item $H_3: X \stackrel{d}{\neq} Y$
+                \end{itemize}
+            \end{column}
+        \end{columns}
+    \end{block}
+
+    % Box 3: Rejection Criteria
+    \begin{block}{Test Statistic }
+        The \textbf{Mann-Whitney $U$ statistic}, defined as
+        $$U = \sum_{i=1}^{m} \sum_{j=1}^{n} I(X_i > Y_j)$$
+        
+        \textbf{Decision Rule:} Under $H_1: \theta > 0$, we expect $Y$ to be generally larger than $X$. Therefore, we \textbf{reject $H_0$ for small values of $U$}.
+    \end{block}
+
+
+\end{frame}
+
+\begin{frame}{Relationship with Other Rank Statistics}
+
+\begin{block}{Rejection Criteria (at level $\alpha$)}
+        Using the Mann-Whitney $U$ statistic:
+        \centering
+        \begin{tabular}{ll}
+            \toprule
+            \textbf{Alternative} & \textbf{Rejection Region for $H_0$} \\
+            \midrule
+            $H_1: \theta > 0$ & Reject $H_0$ if $U \leq c_{\alpha}$ (Small values) \\
+            $H_2: \theta < 0$ & Reject $H_0$ if $U \geq c'_{\alpha}$ (Large values) \\
+            $H_3: \theta \neq 0$ & Reject $H_0$ if $U \leq c_{\alpha_1}$ or $U \geq c'_{\alpha_2}$ \\
+            \bottomrule
+        \end{tabular}
+    \end{block}
+\begin{block}{Wilcoxon Rank Sum Statistic ($W$)}
+    $W$ is the sum of ranks of the $X$ sample in the pooled data. The two are linearly related:
+    $$W = U + \frac{m(m+1)}{2}$$
+    \end{block}
+
+    \begin{block}{Two-Sample Kruskal-Wallis Stat ($H$)}
+    For $k=2$ samples, the Kruskal-Wallis $H$ statistic is a quadratic function of the Mann-Whitney $U$ (centered at its mean):
+    $$H = \frac{12}{N(N+1)mn} \left( U - \frac{mn}{2} \right)^2 = \frac{(U - E(U))^2}{Var(U)} \cdot \frac{m+n+1}{m+n}$$
+    \end{block}
+    
+    \centering
+    \textbf{Conclusion:} These statistics provide identical p-values and lead to the same statistical decisions.
+
+
+\end{frame}
+% Slide 2: Properties under H0
+\begin{frame}{Statistical Properties under $H_0$}
+    \begin{block}{Moments of the $U$ Statistic}
+    Under $H_0$, the Mann-Whitney $U$ statistic has:
+    \begin{itemize}
+        \item \textbf{Mean:} $E(U) = \frac{mn}{2}$
+        \item \textbf{Variance:} $Var(U) = \frac{mn(m+n+1)}{12}$
+    \end{itemize}
+    \end{block}
+
+    \begin{block}{Distribution-Free Property}
+    Under $H_0$, since all $N!$ permutations of ranks are equally likely, the distribution of $U$ depends only on the sample sizes $m$ and $n$, making it \textbf{distribution-free}.
+    \end{block}
+
+    \begin{block}{Asymptotic Normality}
+    As $N = m + n \to \infty$, the standardized statistic converges in distribution:
+    $$Z_N = \frac{U - E(U)}{\sqrt{Var(U)}} \xrightarrow{d} \mathcal{N}(0, 1)$$
+    \end{block}
+\end{frame}
+
+\begin{frame}{Real-life Example: Sputum Histamine Levels}
+    \footnotesize
+
+    % Block 1: The Data
+    \begin{block}{Problem Statement and Data}
+        We investigate whether sputum histamine levels ($\mu g/g$) differ between allergic and nonallergic individuals.
+        \vspace{0.2cm}
+        \centering
+        \begin{tabular}{lp{7.5cm}}
+            \toprule
+            \textbf{Group} & \textbf{Observations} \\
+            \midrule
+            $X$: Allergics ($m=9$) & 67.6, 39.6, 165.0, 100.0, 65.9, 111.2, 31.0, 102.5, 64.7 \\
+            $Y$: Nonallergics ($n=10$) & 57.6, 36.6, 65.0, 130.0, 45.9, 101.8, 51.0, 92.5, 54.7, 85.1 \\
+            \bottomrule
+        \end{tabular}
+    \end{block}
+
+    % Block 2: Hypothesis Setup
+    \begin{block}{Hypothesis Formulation}
+        Let $\theta$ be the location shift parameter such that $F_Y(x) = F_X(x - \theta)$. To test if allergics have higher histamine levels:
+        \begin{itemize}
+            \item \textbf{Null Hypothesis ($H_0$):} $\theta = 0$ (No difference in distributions)
+            \item \textbf{Alternative Hypothesis ($H_1$):} $\theta < 0$ (Allergics have higher levels)
+        \end{itemize}
+    \end{block}
+    
+ \begin{block}{Decision Rule}
+    We evaluate this using Mann-Whitney $U$ statistic. The criterion is to reject $H_0$ for sufficiently large values of $U$. Thus, the rejection region is of the form \textbf{$\{U \geq c_\alpha\}$}, where the critical value $c_\alpha$ is chosen to control the Type I error rate at the nominal level $\alpha$.
+\end{block}
+    % Block 3: Statistic and Rejection
+    
+\end{frame}
+
+\begin{frame}{Exact Distribution under $H_0$}
+    \vspace{-0.2cm}
+    \begin{block}{Exact Distribution for $m=7, n=5$}
+        \footnotesize
+        Under $H_0$, all rank combinations are equally likely. For $N=12$:
+        \begin{itemize}
+            \item \textbf{Total Combinations:} $\binom{N}{n} = \binom{12}{5} = 792$
+            \item \textbf{Range of $U$:} $[0, mn] = [0, 35]$ with symmetry about $17.5$.
+        \end{itemize}
+    \end{block}
+
+    \begin{block}{Probability Mass Function $P(U=u)$ (Under $H_0$)}
+        \centering
+        \fontsize{5.5pt}{6pt}\selectfont
+        \begin{tabular}{cc|cc|cc|cc}
+            \toprule
+            $u$ & $P(U=u)$ & $u$ & $P(U=u)$ & $u$ & $P(U=u)$ & $u$ & $P(U=u)$ \\
+            \midrule
+            0 & 0.00126 & 9 & 0.02652 & 18 & 0.06187 & 27 & 0.02146 \\
+            1 & 0.00126 & 10 & 0.03283 & 19 & 0.06061 & 28 & 0.01641 \\
+            2 & 0.00253 & 11 & 0.03788 & 20 & 0.05808 & 29 & 0.01263 \\
+            3 & 0.00379 & 12 & 0.04419 & 21 & 0.05429 & 30 & 0.00884 \\
+            4 & 0.00631 & 13 & 0.04924 & 22 & 0.04924 & 31 & 0.00631 \\
+            5 & 0.00884 & 14 & 0.05429 & 23 & 0.04419 & 32 & 0.00379 \\
+            6 & 0.01263 & 15 & 0.05808 & 24 & 0.03788 & 33 & 0.00253 \\
+            7 & 0.01641 & 16 & 0.06061 & 25 & 0.03283 & 34 & 0.00126 \\
+            8 & 0.02146 & 17 & 0.06187 & 26 & 0.02652 & 35 & 0.00126 \\
+            \bottomrule
+        \end{tabular}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Simulation: Distribution-Free Property under $H_0$ (1000 iterations)}
+    \vspace{-0.2cm} % Pulls content up to utilize top margin
+    \begin{figure}[htpb]
+        \centering
+        % Top Row
+        \begin{minipage}{0.48\textwidth}
+            \centering
+            \includegraphics[width=\linewidth, height=0.38\textheight, keepaspectratio]{Dist_free 5.png}\\[-0.5ex]
+            {\scriptsize $m = 10, n = 50$}
+        \end{minipage}\hfill
+        \begin{minipage}{0.48\textwidth}
+            \centering
+            \includegraphics[width=\linewidth, height=0.38\textheight, keepaspectratio]{Dist_free 2.png}\\[-0.5ex]
+            {\scriptsize $m = 65, n = 55$}
+        \end{minipage}
+        
+        \vspace{0.3cm} % Controlled gap between rows
+        
+        % Bottom Row
+        \begin{minipage}{0.48\textwidth}
+            \centering
+            \includegraphics[width=\linewidth, height=0.38\textheight, keepaspectratio]{Dist_free 3.png}\\[-0.5ex]
+            {\scriptsize $m = 200, n = 150$}
+        \end{minipage}\hfill
+        \begin{minipage}{0.48\textwidth}
+            \centering
+            \includegraphics[width=\linewidth, height=0.38\textheight, keepaspectratio]{Dist_free 4.png}\\[-0.5ex]
+            {\scriptsize $m = 400, n = 450$}
+        \end{minipage}
+    \end{figure}
+\end{frame}
+\begin{frame}{Key Interpretations of Simulations}
+    \footnotesize
+    \begin{columns}[T]
+        
+        % Left Column: Context and 5th Image
+        \begin{column}{0.4\textwidth}
+            \begin{block}{Simulation Setup}
+                1000 iterations drawn from Beta($\frac{1}{2}$, $\frac{1}{2}$), Cauchy(0,1), Normal(0,9), and Chi-square(4). The dashed vertical line represents:
+                $$E(U) = \frac{mn}{2}$$
+            \end{block}
+            
+            \vspace{0.3cm}
+            \centering
+            \includegraphics[width=0.95\textwidth]{Dist_free 1.png}
+            \caption{\scriptsize $m = 20, n = 25$}
+        \end{column}
+        
+        % Right Column: Observations
+        \begin{column}{0.55\textwidth}
+            \begin{block}{Observations \& Conclusion}
+                \begin{itemize}
+                    \item \textbf{Centering:} In all cases, the density curves correctly center around the theoretical mean $\frac{mn}{2}$.
+                    \item \textbf{Distribution-Free:} The curves from entirely different underlying distributions (Beta, Cauchy, Normal, $\chi^2$) almost perfectly overlap. The sampling distribution under $H_0$ is independent of the parent population.
+                    \item \textbf{Sample Size Effect:} As $m$ and $n$ increase, the overlap becomes more pronounced and the curves become significantly smoother.
+                    \item \textbf{Asymptotic Normality:} For larger sample sizes, the distributions visually converge to a symmetric bell shape, supporting the theoretical asymptotic normality.
+                \end{itemize}
+            \end{block}
+        \end{column}
+        
+    \end{columns}
+\end{frame}
+
+\begin{frame}[t]{Simulations under $H_1$: Location Shift Models}
+    \vspace{-0.2cm}
+    \begin{figure}[htpb]
+        \centering
+        % Top Row
+        \begin{minipage}{0.48\textwidth}
+            \centering
+            \includegraphics[width=\linewidth, height=0.38\textheight, keepaspectratio]{under H_1 1.png}\\[-0.5ex]
+            {\scriptsize $(m, n) = (5, 7)$}
+        \end{minipage}\hfill
+        \begin{minipage}{0.48\textwidth}
+            \centering
+            \includegraphics[width=\linewidth, height=0.38\textheight, keepaspectratio]{under H_1 2.png}\\[-0.5ex]
+            {\scriptsize $(m, n) = (19, 15)$}
+        \end{minipage}
+        
+        \vspace{0.3cm}
+        
+        % Bottom Row
+        \begin{minipage}{0.48\textwidth}
+            \centering
+            \includegraphics[width=\linewidth, height=0.38\textheight, keepaspectratio]{under H_1 3.png}\\[-0.5ex]
+            {\scriptsize $(m, n) = (45, 57)$}
+        \end{minipage}\hfill
+        \begin{minipage}{0.48\textwidth}
+            \centering
+            \includegraphics[width=\linewidth, height=0.38\textheight, keepaspectratio]{under H_1 4.png}\\[-0.5ex]
+            {\scriptsize $(m, n) = (50, 70)$}
+        \end{minipage}
+    \end{figure}
+\end{frame}
+\begin{frame}{Key Interpretations of Simulations under $H_1$}
+    \footnotesize
+    
+    \begin{block}{Effect of Shift ($\theta$) and Sample Size}
+        \begin{itemize}
+            \item \textbf{Power Scaling:} Displacement from the null expectation ($mn/2$) increases with both shift magnitude ($|\theta|$) and sample size, directly increasing test power.
+            \item \textbf{Small vs. Large Samples:} At very small sizes $(5,7)$, densities overlap heavily due to low resolving power. Large samples $(50,70)$ show sharp separation and high power at $|\theta|=1$.
+            \item \textbf{Symmetry:} The $U$ statistic shifts symmetrically above and below $mn/2$ for positive and negative shifts ($+\theta$ and $-\theta$), respectively.
+        \end{itemize}
+    \end{block}
+
+    \begin{block}{Impact of Distributional Tail Weight}
+        \begin{itemize}
+            \item \textbf{Light Tails (Normal, Laplace):} Yield highly concentrated densities and the strongest displacement, implying the highest power.
+            \item \textbf{Near-Null Robustness:} At a minimal shift ($\theta=0.1$), densities from all four families heavily overlap near $mn/2$, demonstrating that near-null behavior remains largely distribution-free.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Asymptotic Distribution of the $U$ Statistic}
+    \footnotesize
+    \begin{block}{Under the Null Hypothesis ($H_0$)}
+        Let $X_1, \dots, X_m \stackrel{iid}\sim F$ and $Y_1, \dots, Y_n \stackrel{iid}\sim F$ be two independent samples. As $m, n \to \infty$ with $m/N \to \lambda \in (0,1)$, the standardized statistic converges in distribution to a standard normal:
+        $$Z = \frac{U - \frac{mn}{2}}{\sqrt{\frac{mn(N+1)}{12}}} \xrightarrow{d} N(0,1)$$
+    \end{block}
+
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.4\textwidth]{QQ 1.png}
+        \caption{\scriptsize Normal Q-Q Plot 1}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[t]{Q-Q Plots: Assessing Normality}
+    \vspace{-0.2cm}
+    \begin{figure}[htpb]
+        \centering
+        % Top Row
+        \begin{minipage}{0.48\textwidth}
+            \centering
+            \includegraphics[width=\linewidth, height=0.42\textheight, keepaspectratio]{QQ 2.png}
+        \end{minipage}\hfill
+        \begin{minipage}{0.48\textwidth}
+            \centering
+            \includegraphics[width=\linewidth, height=0.42\textheight, keepaspectratio]{QQ 3.png}
+        \end{minipage}
+        
+        \vspace{0.3cm} % Controlled gap between rows
+        
+        % Bottom Row
+        \begin{minipage}{0.48\textwidth}
+            \centering
+            \includegraphics[width=\linewidth, height=0.42\textheight, keepaspectratio]{QQ 4.png}
+        \end{minipage}\hfill
+        \begin{minipage}{0.48\textwidth}
+            \centering
+            \includegraphics[width=\linewidth, height=0.42\textheight, keepaspectratio]{QQ 5.png}
+        \end{minipage}
+    \end{figure}
+\end{frame}
+\begin{frame}{Histograms and Q-Q Observations under $H_0$}
+    \footnotesize
+    \textbf{Q-Q Plot Observations:} The sample quantiles closely follow the theoretical normal diagonal line, indicating strong agreement with the normal distribution as sample sizes increase.
+
+    \begin{figure}
+        \centering
+        \begin{tabular}{cc}
+            \includegraphics[width=0.45\textwidth]{Hist 1.png} & 
+            \includegraphics[width=0.45\textwidth]{Hist 2.png}
+        \end{tabular}
+        \caption{\scriptsize Standardized $U$ Statistic under $H_0$}
+    \end{figure}
+
+    \begin{block}{Observations of Histograms under $H_0$}
+        The empirical distribution of the standardized $U$ statistic is perfectly symmetric, bell-shaped, and visually matches the overlaid standard normal probability density curve.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Histograms and Observations under $H_1\; (\theta > 0)$}
+    \begin{figure}
+        \centering
+        \begin{tabular}{ccc}
+            \includegraphics[width=0.3\textwidth]{Hist 3.png} & 
+            \includegraphics[width=0.3\textwidth]{Hist 4.png} & 
+            \includegraphics[width=0.3\textwidth]{Hist 5.png}
+        \end{tabular}
+        \caption{\scriptsize Distribution of $U$ under Shift Alternatives}
+    \end{figure}
+
+   \begin{block}{Observations under $H_1$: The Boundary Effect}
+    Contrary to the null case, under a fixed and sufficiently large location shift $\theta = 5$, the asymptotic normality of $U$ breaks down. Because $U$ is bounded ($0 \leq U \leq mn$), strong sample separation pushes the statistic toward its limits. The histograms reveal severe right-skewness (particularly for lighter-tailed distributions like Normal and Logistic), illustrating that when $P(X < Y)$ approaches $0$ or $1$, the distribution becomes degenerate and highly non-normal. The Cauchy distribution’s heavy tails cause persistent sample overlap, preventing extreme probabilities and maintaining histogram symmetry despite large location shifts.
+\end{block}
+\end{frame}
+
+\begin{frame}{Asymptotic Normal Approximation Overlays}
+    \begin{figure}
+        \centering
+        \begin{tabular}{cc}
+            \includegraphics[width=0.48\textwidth]{asym_normal 1.png} & 
+            \includegraphics[width=0.48\textwidth]{asym_normal 2.png}
+        \end{tabular}
+    \end{figure}
+    
+    \vspace{0.3cm}
+    \footnotesize
+    \begin{center}
+        These density overlays map the convergence speed, confirming that the continuous normal approximation smooths out the discrete steps of the underlying rank-sum distribution.
+    \end{center}
+    \begin{block}{Interpretation of Asymptotic Overlays}
+    \begin{itemize}
+        \item \textbf{Convergence Dynamics:} The density overlays illustrate that as sample sizes increase from $(m=30, n=40)$ to $(m=100, n=150)$, the empirical distribution of the standardized $U$ statistic ($Z$) aligns more perfectly with the theoretical $N(0,1)$ curve.
+        \item \textbf{Distributional Invariance:} The normal approximation remains highly effective regardless of the parent distribution's shape—validating the test for both heavy-tailed (Cauchy) and skewed (Exponential) data under $H_0$.
+    \end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Level Maintenance of the Mann-Whitney Test}
+    \vspace{-0.2cm}
+    \begin{columns}[T]
+        \begin{column}{0.46\textwidth}
+            \scriptsize
+            \textbf{Theoretical Properties}
+            \begin{itemize}
+                \item \textbf{Distribution-Free:} Under $H_0: F = G$ for continuous $F$, the null distribution of $U$ depends only on $m$ and $n$, guaranteeing exact level control.
+                \item \textbf{Discrete Distributions:} In the presence of ties (e.g., Poisson), rankings are no longer equally likely. The test becomes \textbf{conservative}.
+            \end{itemize}
+            
+            \vspace{0.1cm}
+            \textbf{Simulation Steps}
+            \begin{itemize}
+                \item \textbf{Step 1:} Generate $N_{\text{sim}} = 10,000$ iterations by drawing samples of size $m$ and $n$ from the same parent distribution ($H_0$).
+                \item \textbf{Step 2 \& 3:} Calculate the $p$-value for each iteration and count those less than the assigned level $\alpha$: $\sum_{i=1}^{N_{\text{sim}}} \mathbf{1}(p_i < \alpha)$.
+                \item \textbf{Step 4:} Divide this count by 10,000 to find the empirical size estimator: $\widehat{\alpha} = \frac{1}{N_{\text{sim}}} \times \text{count}$.
+                \item \textbf{Step 5:} Check if $\widehat{\alpha}$ falls within the tolerance interval $\alpha \pm (1.96 \times \text{SE})$ to verify if the level is maintained.
+            \end{itemize}
+
+            \vspace{0.1cm}
+            \textbf{Simulation Setup}
+            \begin{itemize}
+                \item \textbf{Parameters:} $m = 11, n = 13$; $N_{\text{sim}} = 10,000$; $\alpha \in \{0.05, 0.01\}$.
+                \item \textbf{Tested:} Normal(0,1), Cauchy(0,1), Poisson($\lambda=10$).
+            \end{itemize}
+        \end{column}
+
+        \begin{column}{0.52\textwidth}
+            \scriptsize
+            \centering
+            \textbf{Table: Estimated Size $\widehat{\alpha}$ under $H_0$} \\
+            \vspace{0.1cm}
+            \begin{tabular}{lccc}
+                \toprule
+                \textbf{Distribution} & \textbf{Nominal $\alpha$} & \textbf{Estimated $\widehat{\alpha}$} & \textbf{Tolerance?} \\ \midrule
+                Normal(0,1)  & 0.05 & 0.0486 & \checkmark \\
+                Normal(0,1)  & 0.01 & 0.0088 & \checkmark \\ \addlinespace
+                Cauchy(0,1)  & 0.05 & 0.0451 & \checkmark \\
+                Cauchy(0,1)  & 0.01 & 0.0094 & \checkmark \\ \addlinespace
+                Poisson(10)  & 0.05 & 0.0457 & \checkmark \\
+                Poisson(10)  & 0.01 & 0.0087 & \checkmark \\ \bottomrule
+            \end{tabular}
+            \vspace{0.2cm}
+            
+            \begin{block}{Key Observations}
+                \begin{itemize}
+                    \item \textbf{Exact Maintenance:} Continuous distributions fall within the 95\% CI [$0.0457, 0.0543$] for $\alpha = 0.05$.
+                    \item \textbf{Conservative Behavior:} The Poisson result ($\widehat{\alpha} \approx 0.0457$) reflects ties from discreteness.
+                    \item \textbf{Robustness:} Maintenance holds regardless of tail behavior or skewness.
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{The Hodges-Lehmann Estimator (HLE) and CI of $\theta$}
+    \footnotesize
+    \begin{block}{Definition and Asymptotic Properties}
+        The HLE $\hat{\theta}$ is the point estimator of the location shift $\theta$ associated with the Wilcoxon Rank-Sum test. It is defined as the \textbf{median of all possible pairwise differences}:
+        $$\hat{\theta} = \text{median} \{D_{i,j} = Y_j - X_i : 1 \le i \le m, 1 \le j \le n\}$$
+    \end{block}
+
+    \begin{block}{Confidence Interval and Simulation Setup for Performance Evaluation}
+        \begin{itemize}
+            \item \textbf{Confidence Interval:} A $(1-\alpha)$ CI for $\theta$ is obtained by finding the values $\theta_0$: \[ [D_{(C_\alpha)}, D_{(n_1n_2-C_{\alpha}+1)}]\] $C_{\alpha}$ is determined from the null distribution of $U$.
+        \end{itemize}
+        To evaluate the HLE, $B = 10,000$ iterations were performed for $\theta = 0$:
+        \begin{itemize}
+            \item \textbf{Distributions:} Normal(0,1), Cauchy(0,1), and Laplace(0,1).
+            \item \textbf{Sample Sizes ($m=n$):} 10, 20, 50, and 100.
+            \item \textbf{Metrics:} Empirical Bias and Mean Squared Error (MSE).
+        \end{itemize}
+    \end{block}
+
+\end{frame}
+
+\begin{frame}{HLE Simulation Results: Bias and RMSE}
+    \vspace{-0.2cm}
+    \begin{table}
+        \centering
+        % \resizebox ensures the 8-column table fits horizontally on the slide.
+        % Requires \usepackage{graphicx} in your preamble.
+        \resizebox{\textwidth}{!}{
+        \renewcommand{\arraystretch}{1.0} % Slightly relaxed row spacing for readability
+        \begin{tabular}{lrrrrrrr}
+            \toprule
+            \textbf{Distribution} & \boldmath$\theta$ & \textbf{Mean HL} & \textbf{Bias} & \textbf{RMSE} & \textbf{Rejection Rate} & \textbf{Coverage} & \textbf{Avg CI Length} \\
+            \midrule
+            Normal      &  0 &  0.0029 &  0.0029 & 0.3241 & 0.0475 & 0.9525 & 1.3133 \\
+            Normal      & -1 & -0.9938 &  0.0062 & 0.3287 & 0.8415 & 0.9455 & 1.3122 \\
+            Normal      &  1 &  1.0118 &  0.0118 & 0.3304 & 0.8605 & 0.9510 & 1.3105 \\ \addlinespace
+            Poisson     &  0 & -0.0149 & -0.0149 & 0.6184 & 0.0535 & 0.9475 & 2.2095 \\
+            Poisson     & -1 & -1.0005 & -0.0005 & 0.6240 & 0.4230 & 0.9500 & 2.2055 \\
+            Poisson     &  1 &  0.9720 & -0.0280 & 0.6311 & 0.4180 & 0.9560 & 2.2140 \\ \addlinespace
+            Cauchy      &  0 & -0.0074 & -0.0074 & 0.6346 & 0.0550 & 0.9450 & 2.7908 \\
+            Cauchy      & -1 & -1.0002 & -0.0002 & 0.6094 & 0.3445 & 0.9500 & 2.7888 \\
+            Cauchy      &  1 &  0.9992 & -0.0001 & 0.6138 & 0.3560 & 0.9545 & 2.7675 \\ \addlinespace
+            Exponential &  0 &  0.0027 &  0.0027 & 0.2151 & 0.0455 & 0.9545 & 0.9348 \\
+            Exponential & -1 & -0.9933 &  0.0067 & 0.2175 & 0.9605 & 0.9485 & 0.9302 \\
+            Exponential &  1 &  1.0008 &  0.0001 & 0.2161 & 0.9630 & 0.9570 & 0.9273 \\
+            \bottomrule
+        \end{tabular}
+        }
+    \end{table}
+
+    \vspace{-0.1cm}
+    \begin{block}{\footnotesize Interpretations}
+        \fontsize{6pt}{5pt}\selectfont
+        \begin{itemize} % Adds comfortable spacing between points
+        
+        \item \textbf{Distribution-Free Validity:} Coverage probabilities ($\approx 0.95$) and Type I errors ($\approx 0.05$ at $\theta=0$) hold across all tested distributions, confirming robust CI construction.
+        
+        \item \textbf{Empirical Unbiasedness:} Near-zero empirical bias under $H_0$ verifies the HLE as a reliable, unbiased point estimator regardless of the underlying density.
+        
+        \item \textbf{Robustness to Heavy Tails:} Maintains finite RMSE ($\approx 0.62$) and stable CI lengths for Cauchy data.
+        
+        \item \textbf{Density-Dependent Efficiency:} Statistical power and precision vary by population; achieving high power ($>0.84$) for Normal/Exponential shifts, but yielding wider CIs for Cauchy/Poisson data.
+    \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Departure from Assumptions: Discrete Distributions}
+    \framesubtitle{Simulation Setup and The Tie Problem Summary}
+
+    \begin{columns}[T]
+        % Left Column: Setup
+        \begin{column}{0.48\textwidth}
+            \begin{block}{Simulation Setup ($H_0$)}
+                \small
+                Investigates $U$ under four standard discrete families when $H_0$ holds ($\theta=0$, samples from same distribution).
+                \vspace{0.2cm}
+                \begin{itemize}
+                    \item \textbf{Sample Sizes:} $m=19$, $n=13$.
+                    \item \textbf{Tested Distributions:}
+                    \begin{itemize}
+                        \scriptsize
+                        \item Binomial ($n_0=7, p=0.35$)
+                        \item Geometric ($p=0.37$)
+                        \item Negative Binomial ($r=8, p=0.79$)
+                        \item Poisson ($\lambda=4.9$)
+                    \end{itemize}
+                    \item \textbf{Continuous Reference Mean:} $mn/2 = 123.5$.
+                \end{itemize}
+            \end{block}
+        \end{column}
+
+        % Right Column: The Problem & Equations
+        \begin{column}{0.48\textwidth}
+            \begin{block}{Summary of The Tie Problem}
+                \small
+                Standard theory assumes continuous distributions ($P(X_i=Y_j)=0$). For discrete data, ties occur with positive probability ($P(X_i=Y_j)>0$), fundamentally altering the null distribution of $U$.\\
+           
+                The tie probability is defined as $\tau(F) = \sum_k [P(X = k)]^2$. This causes a deflation of the null mean:
+                
+                \vspace{0.2cm}
+                \textbf{Discrete Null Mean Equation:}
+                \begin{equation*}
+                    \mathbb{E}_{disc}[U] = mn \cdot \frac{1 - \tau(F)}{2} < \frac{mn}{2}
+                \end{equation*}
+                
+                \vspace{0.1cm}
+                Distributions with higher tie probability produce a $U$-statistic more severely deflated below $mn/2$.
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% ==============================================================================
+% SLIDE 2: Results and Interpretations
+% ==============================================================================
+\begin{frame}{Simulation Results and Plot Interpretations}
+    \framesubtitle{Discrete Data Simulation Results}
+
+    \begin{columns}[c]
+        % Left Column: Image
+        \begin{column}{0.5\textwidth}
+            \begin{figure}
+                % Assume you cropped Fig 2 from page 11.2 and saved it as discrete_dist.png
+                \includegraphics[width=\textwidth]{Discrete Dist.png}
+                \caption{Smoothed histograms of null $U$ statistic ($m=19, n=13$). Dashed line is theoretical continuous mean 123.5.}
+            \end{figure}
+        \end{column}
+
+        % Right Column: Interpretations & Conclusions
+        \begin{column}{0.48\textwidth}
+            \scriptsize
+            \begin{alertblock}{Key Observations}
+                \begin{itemize}
+                    \item \textbf{Universal Left-Shift:} All modal regions lie strictly to the left of the continuous reference line (123.5).
+                    \item \textbf{Ordering by Displacement:} Geometric (most displaced/leftmost) $>$ Negative Binomial $\approx$ Binomial $>$ Poisson (rightmost). This matches tie probability ordering.
+                    \item \textbf{Spread Differences:} Poisson density is widest; Binomial/Negative Binomial are narrowest.
+                \end{itemize}
+            \end{alertblock}
+
+            \begin{block}{Implications for Hypothesis Testing}
+                Applying uncorrected standard null distribution to discrete data leads to:
+                \begin{itemize}
+                    \item \textbf{Inflated Type I Error:} For lower-tail or two-sided tests (anti-conservative).
+                    \item \textbf{Conservative Behavior:} For upper-tail tests.
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Simulation Study: Bivariate Dependence}
+    \begin{columns}[T]
+        % Left Column: Setup
+        \begin{column}{0.5\textwidth}
+            \small
+            \begin{block}{Simulation Setup}
+                To evaluate the performance of the Mann-Whitney test on Bivariate distributions ($B=1000$ iterations):
+                \begin{itemize}
+                    \item \textbf{Sample Sizes:} $n_1 = 75, n_2 = 75$.
+                    \item \textbf{Distributions:} 
+                    \begin{itemize}
+                        \item \textbf{Bivariate Normal:} $\boldsymbol{\mu} = (0,0)^\top$, $\boldsymbol{\Sigma} = \begin{pmatrix} 1 & 0.5 \\ 0.5 & 1 \end{pmatrix}$
+                        \item \textbf{Bivariate Exponential:} Constructed with $\rho = 0.3$; marginals $\text{Exp}(1)$
+                        \item \textbf{Bivariate Poisson:} Constructed via a Cholesky decomposition of the same normal covariance matrix; marginals $\text{Pois}(7)$ and $\text{Pois}(11)$ respectively
+                        \item \textbf{Bivariate Cauchy:} Using bivariate normal - constructed the paired data with marginals $\mathcal{C}(0, 1)$ and $\mathcal{C}(1, 2.5)$.
+                    \end{itemize}
+                    \item The dashed vertical reference line marks the theoretical continuous null mean $n^2/2 = 75^2/2 = 2812.5$.
+                \end{itemize}
+            \end{block}
+        \end{column}
+
+        % Right Column: Photo
+        \begin{column}{0.48\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=\textwidth]{Bivariate.png}
+                \caption{\scriptsize Sampling Distribution Plot}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Key Interpretations: Bivariate Simulations}
+    
+    \begin{block}{Universal Leftward Displacement}
+        Positive correlation between $X$ and $Y$ ($ \rho > 0 $) suppresses the probability $P(X_i > Y_i)$, shifting the density strictly to the left of the null mean $n^2/2 = 2812.5$.
+    \end{block}
+
+    \begin{itemize}
+        \item \textbf{Ordering of Displacement:} 
+        $\text{Poisson} \succ \text{Cauchy} \succ \text{Exponential} \approx \text{Normal}$
+    \end{itemize}
+
+    \vspace{0.2cm}
+    \small
+    \begin{table}
+        \centering
+        \begin{tabular}{lp{3.5cm}p{4cm}}
+            \toprule
+            \textbf{Distribution} & \textbf{Behavior} & \textbf{Primary Driver} \\
+            \midrule
+            \textbf{Bivariate Poisson} & Most extreme shift; modal region 1000--1200. & Asymmetric marginals ($\lambda_1=7, \lambda_2=11$) + tie effects. \\
+            \addlinespace
+            \textbf{Bivariate Cauchy} & Broad and highly unstable. & Undefined moments (infinite variance) and scale asymmetry. \\
+            \addlinespace
+            \textbf{Bivariate Normal} & Closest to reference; most ``regular'' structure. & Purely driven by $\rho=0.5$ (no asymmetry or ties). \\
+            \addlinespace
+            \textbf{Bivariate Exponential} & Intermediate; tracks Normal but right-skewed. & Moderate $\rho=0.3$ and inherent marginal asymmetry. \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+
+    \vfill
+    \centering
+\end{frame}
+
+
+\begin{frame}{Consistency and Power of the Mann-Whitney Test}
+    \footnotesize
+    \begin{block}{Definition}
+        The power function of the test is defined as $\beta(\theta) = P_\theta(U \in \mathcal{R})$, where:
+        \begin{itemize}
+            \item \textbf{At the null ($\theta=0$):} $\beta(0) = \alpha$ (the nominal significance level).
+            \item \textbf{Under the alternative ($\theta \neq 0$):} $\beta(\theta)$ measures the probability of correctly rejecting a false null hypothesis ($1 - \beta$ is the Type II error).
+        \end{itemize}
+    \end{block}
+
+    \begin{block}{Consistency}
+        A sequence of tests is \textbf{consistent} if $\beta_N(\theta) \to 1$ as $N \to \infty$ for every fixed $\theta \neq 0$.
+        \begin{itemize}
+            \item \textbf{Result:} The Mann-Whitney tests are consistent.
+            \item This holds against all location-shift alternatives $F(x - \theta)$ for continuous distributions.
+        \end{itemize}
+    \end{block}
+
+    \begin{block}{Observations from Empirical Power Curves for $\theta > 0$}
+        \begin{itemize}
+            \item \textbf{Sample Size:} Power curves are strictly preserved across distributions; the largest pair $(m=67, n=85)$ consistently achieves the highest power.
+            \item \textbf{Tail Behavior:} Power rises the slowest under the \textbf{Cauchy} distribution.
+            \item \textbf{Efficiency:} The transition to near-unity power is rapid for Normal and Logistic distributions in the interval $\theta \in [0.5, 2]$.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Empirical Power Curves across Distributions}
+    \vspace{-0.2cm}
+    \begin{figure}[h]
+        \centering
+        % Top Row
+        \begin{columns}[c]
+            \begin{column}{0.48\textwidth}
+                \centering
+                \includegraphics[width=0.85\textwidth]{Power 1.png}
+                \caption{\scriptsize Normal Distribution ($\theta > 0$)}
+            \end{column}
+            \begin{column}{0.48\textwidth}
+                \centering
+                \includegraphics[width=0.85\textwidth]{Power 2.png}
+                \caption{\scriptsize Cauchy Distribution ($\theta > 0$)}
+            \end{column}
+        \end{columns}
+        
+        \vspace{0.2cm}
+        
+        % Bottom Row
+        \begin{columns}[c]
+            \begin{column}{0.48\textwidth}
+                \centering
+                \includegraphics[width=0.85\textwidth]{Power 3.png}
+                \caption{\scriptsize Laplace Distribution ($\theta > 0$)}
+            \end{column}
+            \begin{column}{0.48\textwidth}
+                \centering
+                \includegraphics[width=0.85\textwidth]{Power 4.png}
+                \caption{\scriptsize Logistic Distribution ($\theta > 0$)}
+            \end{column}
+        \end{columns}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Power Under the Left-Tailed Alternative ($\theta < 0$)}
+    \footnotesize
+    \begin{block}{Symmetry and Qualitative Observations}
+        The left-tailed power curves (plotted over $\theta \in [-4, 0]$) are mirror images of the right-tailed results due to the symmetry of the four distributions considered.
+        \begin{itemize}
+            \item \textbf{Directionality:} Power is highest (near 1) for strongly negative $\theta$ and decreases to approximately $\alpha$ as $\theta \to 0^-$.
+            \item \textbf{Distribution Performance:} The \textbf{Laplace} distribution yields the sharpest transition, while the \textbf{Cauchy} remains the most gradual.
+            \item \textbf{Consistency:} The sample-size ordering is maintained uniformly for all $\theta < 0$ : 
+            $$\hat{\beta}_{(11,12)}(\theta) < \hat{\beta}_{(15,17)}(\theta) < \hat{\beta}_{(29,35)}(\theta) < \hat{\beta}_{(42,55)}(\theta) < \hat{\beta}_{(67,85)}(\theta)$$.
+        \end{itemize}
+    \end{block}
+
+    \begin{block}{The Cauchy Case}
+        \begin{itemize}
+            \item Unlike other distributions where the smallest sample pair reaches saturation well before $|\theta| = 4$, the Cauchy curve for $(m=11, n=12)$ does not attain power 1 even at $\theta = -4$.
+            \item This reaffirms the practical difficulty of detecting location shifts under heavy-tailed distributions with small samples.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Empirical Power Comparison: Left-Tailed Results}
+    \vspace{-0.2cm}
+    \begin{figure}[h]
+        \centering
+        % Top Row
+        \begin{columns}[c]
+            \begin{column}{0.48\textwidth}
+                \centering
+                \includegraphics[width=0.85\textwidth]{Power 5.png}
+                \caption{\scriptsize Normal ($\theta < 0$)}
+            \end{column}
+            \begin{column}{0.48\textwidth}
+                \centering
+                \includegraphics[width=0.85\textwidth]{Power 6.png}
+                \caption{\scriptsize Cauchy ($\theta < 0$)}
+            \end{column}
+        \end{columns}
+        
+        \vspace{0.2cm}
+        
+        % Bottom Row
+        \begin{columns}[c]
+            \begin{column}{0.48\textwidth}
+                \centering
+                \includegraphics[width=0.85\textwidth]{Power 7.png}
+                \caption{\scriptsize Laplace ($\theta < 0$)}
+            \end{column}
+            \begin{column}{0.48\textwidth}
+                \centering
+                \includegraphics[width=0.85\textwidth]{Power 8.png}
+                \caption{\scriptsize Logistic ($\theta < 0$)}
+            \end{column}
+        \end{columns}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Power Under the Two-Tailed Alternative ($\theta \neq 0$)}
+    \footnotesize
+    \begin{block}{The Characteristic U-Shape}
+        The two-tailed power functions (plotted over $\theta \in [-3, 3]$) exhibit a symmetric U-shape centered at the null ($\theta = 0$).
+        \begin{itemize}
+            \item \textbf{Size Control:} All curves reach their minimum near $\alpha = 0.025$ at the null, confirming correct size control.
+            \item \textbf{Symmetry:} Power increases symmetrically as the absolute magnitude of the shift, $|\theta|$, grows.
+        \end{itemize}
+    \end{block}
+
+    \begin{block}{Sensitivity and Distributional Ranking}
+        The "width" of the U-shape serves as a summary of the test's sensitivity (narrower troughs indicate smaller minimum detectable effects).
+        \begin{itemize}
+            \item \textbf{Ranking:} Sensitivity is highest under the \textbf{Laplace} distribution (narrowest U), followed by \textbf{Logistic}, \textbf{Normal}, and finally \textbf{Cauchy} (widest U).
+            \item \textbf{Sample Size Effect:} Increasing $N$ narrows the trough for all distributions, focusing the power towards the neighborhood of $\theta = 0$.
+            \item \textbf{Cauchy Jaggedness:} For small samples, Cauchy curves exhibit irregularity due to high variability from extreme realizations, a behavior that stabilizes as sample sizes increase.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Empirical Power Comparison: Two-Tailed Results}
+    \vspace{-0.2cm}
+    \begin{figure}[h]
+        \centering
+        % Top Row
+        \begin{columns}[c]
+            \begin{column}{0.48\textwidth}
+                \centering
+                \includegraphics[width=0.85\textwidth]{Power 9.png}
+                \caption{\scriptsize Normal ($\theta \neq 0$)}
+            \end{column}
+            \begin{column}{0.48\textwidth}
+                \centering
+                \includegraphics[width=0.85\textwidth]{Power 10.png}
+                \caption{\scriptsize  Cauchy($\theta \neq 0$)}
+            \end{column}
+        \end{columns}
+        
+        \vspace{0.2cm}
+        
+        % Bottom Row
+        \begin{columns}[c]
+            \begin{column}{0.48\textwidth}
+                \centering
+                \includegraphics[width=0.85\textwidth]{Power 11.png}
+                \caption{\scriptsize Laplace ($\theta \neq 0$)}
+            \end{column}
+            \begin{column}{0.48\textwidth}
+                \centering
+                \includegraphics[width=0.85\textwidth]{Power 12.png}
+                \caption{\scriptsize Logistic ($\theta \neq 0$)}
+            \end{column}
+        \end{columns}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Theoretical Framework of Unbiasedness}
+    \footnotesize % Reduced font size to fit all content comfortably
+    
+    \begin{block}{Definition of an Unbiased Test}
+        Let $\phi$ be a test for $H_0: \theta = 0$ versus $H_1: \theta \neq 0$ at level $\alpha$.
+        Define the \textbf{power function} $\pi(\theta) = P_\theta(\text{reject } H_0)$. The test $\phi$ is unbiased at level $\alpha$ if:
+        \begin{enumerate}
+            \item $\pi(0) \leq \alpha$ (Size condition)
+            \item $\pi(\theta) \geq \alpha$ for all $\theta \in H_1$ (Power condition)
+        \end{enumerate}
+    \end{block}
+
+    \begin{block}{Unbiasedness for the Two-Sided Mann-Whitney Test}
+        For $H_1: \theta \neq 0$, the test rejects $H_0$ when $U$ is too large or too small. The rejection region at level $\alpha$ is:
+        \[ \mathcal{R}_\alpha = \{U \leq c_{\alpha/2}\} \cup \{U \geq c_{\alpha/2}^*\} \]
+        where $c_{\alpha/2}$ and $c_{\alpha/2}^*$ are critical values of the null distribution. Under the location-shift model with continuous $F$, this test is unbiased ($\pi(\theta) \geq \alpha \,\, \forall \theta \neq 0$).
+    \end{block}
+
+    \begin{exampleblock}{Key Features of the Power Function $\pi(\theta)$}
+        \begin{itemize}
+            \item \textbf{Minimum at $\theta=0$:} $\pi(0) = \alpha$ by definition.
+            \item \textbf{Symmetry:} perfectly V-shaped curve (or U-shaped) symmetric around $|\theta|$.
+            \item \textbf{Monotone Increase:} non-decreasing for $\theta > 0$.
+            \item \textbf{Convergence to 1:} $\pi(\theta) \to 1$ as sample size increases (consistency).
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% ==============================================================================
+% SLIDE 2: Simulation Study
+% ==============================================================================
+\begin{frame}{Simulation Study: Setup and Output}
+    \small
+    % Top Part: Simulation Setup Block
+    \begin{block}{Simulation Setup}
+        To empirically verify theoretical unbiasedness ($B=1000$ replications, fine grid of $\theta \in [-2.5, 2.5]$):
+        \begin{itemize}
+            \item \textbf{Distributions:} Normal(0,1), Cauchy(0,1) [heavy-tailed], Poisson($\lambda=4$) [discrete].
+            \item \textbf{Sample Sizes ($m,n$):} Small (12, 17) and Large (60, 35).
+            \item \textbf{Significance Levels ($\alpha$):} \{0.04, 0.06, 0.08, 0.10\}.
+            \item \textbf{Test:} Two-sided Mann-whitney.
+        \end{itemize}
+    \end{block}
+
+    \vspace{0.1cm} % Adjust spacing between setup and image
+
+    % Bottom Part: Power Curves Image
+    \begin{figure}
+        \centering
+        % Adjusted width for vertical stacking
+        \includegraphics[width=0.75\textwidth]{Unbiased.png}
+        \caption{\scriptsize Fig: Power curves of the two-sided Mann-Whitney test across distributions, sample sizes, and $\alpha$ levels}
+    \end{figure}
+\end{frame}
+
+% ==============================================================================
+% SLIDE 3: Results and Conclusion
+% ==============================================================================
+\begin{frame}{Key Observations and Conclusions}
+    \fontsize{7.5pt}{8pt}\selectfont % Reduce font size to fit many points
+    
+    \begin{alertblock}{Key Observations}
+        \begin{enumerate}
+            \item \textbf{V-shaped Curves (Continuous Case):} Smooth, symmetric V-shapes for Normal and Cauchy confirm empirical size matches nominal $\alpha$ at $\theta=0$ and rises monotonically elsewhere ($\hat{\pi}(\theta) \geq \alpha$). This is the signature of an unbiased test.
+            \item \textbf{Sample Size & Power:} striking increase in power from small to large sample pairs. Large-sample curves are steeper and plateau near 1 much sooner (consistency).
+            \item \textbf{Significance Level:} Higher $\alpha$ yields uniformly higher power.
+            \item \textbf{Cauchy Robustness:} Maintains its V-shape despite undefined mean/variance. Validates the test is consistent even for pathological distributions, dependent only on continuity, not moments.
+        \end{enumerate}
+    \end{alertblock}
+    \begin{block}{Discrete Shifts (The Poisson Case)}
+    The Poisson distribution is not a formal location family. For a non-integer shift $\theta$, the variable $Y = X + \theta$ is a \textit{Shifted Poisson} whose support no longer aligns with the non-negative integers. This creates disjoint sample spaces (zero probability of ties). Consequently, $P(X < Y)$ only changes when $\theta$ traverses an integer boundary, which flawlessly explains the step-function plateaus observed in our empirical power curves. The non-parametric location-shift model $F(x) = G(x-\theta)$ remains perfectly valid.
+\end{block}
+    \begin{exampleblock}{Conclusions}
+        Simulations strongly confirm theoretical unbiasedness across continuous, heavy-tailed, and discrete distributions. Unbiasedness is proven to be a truly distribution-free property, contingent only on the continuity of $F$ and the location-shift structure, not on moment conditions. Larger sample sizes dramatically sharpen the V-shape, illustrating both consistency and improved unbiasedness.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Comparison with Parametric Tests (Normal Distribution)}
+    \footnotesize
+    \begin{block}{Simulation Setup}
+    \begin{itemize}
+        \item \textbf{Underlying Distributions:} The samples are drawn from normal distributions: $\mathcal{N}(0, 1)$ and $\mathcal{N}(\theta, 1)$.
+        \item \textbf{Right-Tailed Comparison:} The parametric benchmark used the unknown variance assumption (using a $t$-test).
+        \item \textbf{Left \& Two-Tailed Comparisons:} The parametric benchmark used the known variance assumption (using a $z$-test).
+    \end{itemize}
+\end{block}
+    \begin{block}{Efficiency and Power Trade-offs}
+        To assess relative performance, Mann-Whitney empirical power curves were compared against $t$-test (right-tailed) and $z$-test (left/two-tailed) results.
+        \begin{itemize}
+            \item \textbf{Near-Equivalence:} Across all three test directions, the nonparametric and parametric curves are virtually indistinguishable.
+            \item \textbf{Theoretical Alignment:} This is entirely consistent with the Asymptotic Relative Efficiency (ARE) with the t-test is $3/\pi \approx 0.955$ under normality.
+            \item \textbf{Observation:} An ARE slightly below 1 implies the Mann-Whitney test requires only $\sim 5\%$ more observations to match the $t$-test's power.
+        \end{itemize}
+    \end{block}
+
+    \begin{block}{The Principal Advantage}
+        The comparison reinforces that the Mann-Whitney test forgoes essentially no power when normality holds, while offering substantial and theoretically guaranteed gains under heavier-tailed alternatives.
+    \end{block}
+\end{frame}
+
+\begin{frame}[t]{Empirical Power Comparison: Mann-Whitney vs. $t/z$-test}
+    \vspace{-0.2cm}
+    \begin{figure}[htpb]
+        \centering
+        % Top Row
+        \begin{minipage}{0.48\textwidth}
+            \centering
+            \includegraphics[width=\linewidth, height=0.38\textheight, keepaspectratio]{Power 13.png}\\[-0.5ex]
+            {\scriptsize (a) Right-Tailed Comparison}
+        \end{minipage}\hfill
+        \begin{minipage}{0.48\textwidth}
+            \centering
+            \includegraphics[width=\linewidth, height=0.38\textheight, keepaspectratio]{Power 14.png}\\[-0.5ex]
+            {\scriptsize (b) Left-Tailed Comparison}
+        \end{minipage}
+        
+        \vspace{0.3cm}
+        
+        % Bottom Row
+        \begin{minipage}{0.48\textwidth}
+            \centering
+            \includegraphics[width=\linewidth, height=0.38\textheight, keepaspectratio]{Power 15.png}\\[-0.5ex]
+            {\scriptsize (c) Two-Tailed Comparison}
+        \end{minipage}\hfill
+        \begin{minipage}{0.48\textwidth}
+            \centering
+            % Added a slight vertical space to center the text visually against the left image
+            \vspace{1cm} 
+            {\scriptsize \textbf{Note:}\\[0.5ex]
+            Curves overlap almost perfectly throughout the plotted range, confirming high relative efficiency.}
+        \end{minipage}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Parametric vs. Non-Parametric: Study Design}
+    \footnotesize
+    \begin{block}{Comparison of Test Statistics}
+        We compare the performance of the classical parametric approach against the rank-based non-parametric approach:
+        \begin{itemize}
+            \item \textbf{Welch's $t$-Test ($T_W$):} $T_W = \frac{\bar{X} - \bar{Y}}{\sqrt{S_X^2/m + S_Y^2/n}}$. Designed for heteroscedasticity ($\sigma_X \neq \sigma_Y$).
+            \item \textbf{Mann-Whitney $U$ Test:} Rank-based test, distribution-free under $H_0$, targeting stochastic ordering and location shifts.
+        \end{itemize}
+    \end{block}
+
+    \begin{block}{The Two Simulation Experiments ($B=1000$ iterations)}
+        \begin{enumerate}
+            \item \textbf{Experiment 1 (Heteroscedasticity):} Normal populations with a high variance ratio. $X \sim N(0,1)$ vs. $Y \sim N(\theta, 81)$ with $m=n=30$.
+            \item \textbf{Experiment 2 (Non-Normality):} Small samples ($n_1=5, n_2=7$) from three non-normal location families:
+                \begin{itemize}
+                    \item \textbf{Cauchy:} Infinite variance (ARE $U,t = \infty$).
+                    \item \textbf{Exponential:} Asymmetric, rate-shift model.
+                    \item \textbf{Laplace:} Heavier-than-normal tails (ARE $U,t = 1.5$).
+                \end{itemize}
+        \end{enumerate}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Exp 1: Normal Populations with Unequal Variances}
+    \begin{center}
+        \includegraphics[width=0.7\textwidth]{Para-nonpara 1.png}
+    \end{center}
+
+    \vspace{-0.2cm}
+    \footnotesize
+    \begin{block}{Interpretation: High Variance Ratio ($\sigma_Y/\sigma_X = 9$)}
+        \begin{itemize}
+            \item \textbf{Behrens-Fisher Effect:} At $\theta=0$, both tests show power ($0.06$–$0.10$) above $\alpha=0.05$. This is because they detect the scale difference as a distributional change.
+            \item \textbf{Mann-Whitney Dominance:} The $U$-test curve lies uniformly above Welch's. It identifies the "combined signal" of mean and variance shifts.
+            \item \textbf{Growth Rate:} Due to extreme noise ($\sigma_Y=9$), power grows slowly for both tests even as the shift increases to $|\theta|=3$.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Exp 2: Performance under Non-Normal Distributions}
+    \begin{center}
+        \includegraphics[width=0.7\textwidth]{para-nonpara 2.png}
+    \end{center}
+
+    \vspace{-0.2cm}
+    \footnotesize
+    \begin{block}{Interpretation: Robustness and Efficiency}
+        \begin{itemize}
+            \item \textbf{Cauchy:} Mann-Whitney (solid) significantly outperforms Welch (dashed). The $t$-test is inefficient here as the sample mean has infinite variance.
+            \item \textbf{Exponential:} Curves are close due to the very small sample sizes ($5, 7$) and the specific rate-shift nature of the simulation.
+            \item \textbf{Laplace Note:} The flat curves are a known simulation artefact (vectorized shift error). Theoretical ARE ($1.5$) suggests Mann-Whitney should dominate.
+            \item \textbf{Conclusion:} For 2 sided test, we can see the test using Mann-whitney statistic is more powerful than the t-test for testing $H_0: \theta = 0$ vs $H_1:\theta \ne 0$. 
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% ==============================================================================
+% SLIDE 1: Setup and Tie Problem
+% ==============================================================================
+
+\begin{frame}{High-Dimensional Two-Sample Location Problem}
+    \footnotesize
+    \begin{block}{Problem Setup}
+        Consider two independent high-dimensional samples $\mathbf{X}_1, \dots, \mathbf{X}_m \stackrel{\text{iid}}{\sim} F(\text{\textbf{x}}) \in \mathbb{R}^p$ and $\mathbf{Y}_1, \dots, \mathbf{Y}_n \stackrel{\text{iid}}{\sim} G(\text{\textbf{x}})$, where $X_i$, $Y_j\in \mathbb{R}^p$ and $p \gg N$. 
+    \end{block}
+
+    \begin{block}{Hypotheses}
+        Let $\boldsymbol{\theta}$ be the location shift vector where $G(\text{\textbf{x}}) = F(\text{\textbf{x}}-\boldsymbol{\theta})$:\\
+            $H_0: \boldsymbol{\theta} = \mathbf{0}$ (No difference in any feature) vs 
+            $H_1: \boldsymbol{\theta} \neq \mathbf{0}$ (There exists at least one feature which differs)
+    \end{block}
+
+    \begin{block}{Test Statistic and Asymptotic Distribution}
+        The test statistic is based on the maximum of the standardized component-wise Mann-Whitney statistics:
+        $$M_p = \max_{1 \le j \le p} \frac{|U_j - \mathbb{E}[U_j]|}{\sqrt{\text{Var}(U_j)}} \text{, where } U_j = \sum_{i=1}^m R_{ij}$$
+        Under $H_0$, as $p \to \infty$, the squared statistic follows an \textbf{Extreme Value (Gumbel) Distribution}(assuming weak dependence between different features):
+        $$P(M_p^2 - 2\log p + \log \log p \le x) \to \exp\left(-\frac{1}{\sqrt{\pi}} e^{-x/2}\right)$$
+    \end{block}
+
+    \begin{block}{Rejection Region}
+        For a significance level $\alpha$, we reject $H_0$ if:
+        $$M_p^2 > 2\log p - \log \log p + q_\alpha$$
+        where $q_\alpha = -2 \log(-\sqrt{\pi} \log(1-\alpha))$.
+    \end{block}
+\end{frame}
+
+    \begin{frame}{Simulation Study: Sparse Signal Detection}
+    \small
+    \begin{block}{Simulation Setup} Evaluate the performance of the High-Dimensional Mann-Whitney $U$ statistic ($B=1000$ iterations):
+        \begin{itemize}
+            \item Dimensionality $p = 1000$ with small samples of $n_1 = 25$ and $n_2 = 25$ ($p \gg n$).
+            \item \textbf{Injection of Sparse Signal:} A location shift $\Delta_k = 2.5$ is injected into only 5 features ($k=1, \dots, 5$), representing a 99.5\% sparse null environment.
+            \item \textbf{Heavy-Tailed Noise Generation:} Data is sampled from a Student's $t$-distribution with $\nu = 2$ degrees of freedom to simulate frequent extreme outliers.
+            \item \textbf{Significance Threshold:} A Bonferroni-corrected threshold of $\alpha' = 0.05 / 1000$ is applied to account for multiple testing across the feature space.
+        \end{itemize}
+    \end{block}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.75\textwidth]{High dimensional.png}
+        \caption{\scriptsize Fig: Empirical Power comparison across varying dimensions $p$ and shifts $\theta$.}
+    \end{figure}
+    \end{frame}
+
+\begin{frame}{Interpretations: High-Dimensional Observations}
+    \footnotesize
+    \begin{itemize}
+        \item \textbf{Sparse Signal Identification:} The plot clearly shows five distinct spikes corresponding to the indices where the shift $\Delta = 2.5$ was injected. The statistic effectively isolates "needles" in the high-dimensional "haystack" while keeping noise floor below the Gumbel threshold.
+        
+        \item \textbf{Type I Error Control:} Under $H_0$, the empirical distribution of $M_n^2$ follows the theoretical Gumbel limit. Using the threshold $q_\alpha$ ensures that the probability of a "false discovery" (identifying a signal where none exists) remains strictly at or below $\alpha = 0.05$.
+        
+        \item \textbf{Robustness to Distributional Shifts:} While the $t$-test power fluctuates wildly under non-normal distributions, the Mann-Whitney $M_n$ provides a stable and consistent power curve. This confirms that the Gumbel approximation is robust for large $p$, even with small sample sizes ($n=25$).
+    \end{itemize}
+    
+    \begin{exampleblock}{Conclusion}
+        For high-dimensional sparse location problems with potentially heavy-tailed data, the max-type Mann-Whitney statistic is the superior choice for maintaining power and controlling false discoveries.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Utility Across Various Sectors}
+    \small
+    \begin{itemize}
+        \item \textbf{Bioinformatics (Genomics):} Comparing expression levels of thousands of genes ($p$) across small groups of patients ($n$). High-dimensional MW is ideal due to the non-normal nature of gene expression data.
+        \item \textbf{Finance:} Analyzing asset returns or risk factors in large portfolios where the number of assets exceeds the number of historical time points.
+        \item \textbf{Signal Processing/Image Recognition:} Detecting differences in high-resolution feature vectors or pixel-wise intensities between two classes of images.
+        \item \textbf{Environmental Science:} Monitoring chemical concentrations across hundreds of geographic sensors where data often contains extreme spikes (outliers).
+    \end{itemize}
+\end{frame}
+
+\end{document}
